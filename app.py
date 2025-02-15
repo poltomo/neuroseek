@@ -12,11 +12,7 @@ HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
 <head>
-<<<<<<< HEAD
-    <title>NeuroSeek Search</title>
-=======
     <title>neuroseek</title>
->>>>>>> 7ae41a2 (no change)
 </head>
 <body>
     <h1>neuroseek</h1>
@@ -43,11 +39,12 @@ def search():
     results = []
     
     if query:
-        results = solr.search("title:"+query, rows=10)
+        results = solr.search("content:"+query, rows=10)
     print(list(results))
     return render_template_string(HTML_TEMPLATE, results=results)
 
-if __name__ == "__main__":s
+if __name__ == "__main__":
+    
     app.run(debug=True,port=5000)
 
     solr.add([
