@@ -18,6 +18,70 @@ HTML_TEMPLATE = """
 <html>
 <head>
     <title>neuroseek</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            text-align: center;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            font-size: 48px;
+            color: #000000;
+            margin-top: 50px;
+        }
+        form {
+            margin: 20px auto;
+        }
+        input[type="text"] {
+            width: 400px;
+            padding: 10px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            background-color: #f8f8f8;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>neuroseek</h1>
+    <form method="GET">
+        <input type="text" name="q" placeholder="Enter search query" required>
+        <button type="submit">Search</button>
+    </form>
+    
+    {% if results %}
+        <h2>Results:</h2>
+        <ul>
+        {% for doc,rk in results %}
+            <li><strong>{{ doc['id'] }}</strong> sim {{ rk['score'] }}: {{ doc['content'][0] if 'content' in doc else 'No content' }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
+"""
+HTML_TEMPLATE_OLD = """
+<!DOCTYPE html>
+<html>
+<head>
+    <title>neuroseek</title>
 </head>
 <body>
     <h1>neuroseek</h1>
@@ -52,14 +116,14 @@ def search():
         # print(list(results))
     return render_template_string(HTML_TEMPLATE,
                                   results=zip(sorted(results,key=lambda x:ranking[results.index(x)]["score"]),
-                                           sorted(ranking,key=lambda x:x["score"])) if query else zip([],[]))
+                                           sorted(ranking,key=lambda x:x["score"])) if query else None)
 
 if __name__ == "__main__":
     app.run(debug=True,port=5000)
     solr.add([
         {
-            "id": "test_2",
+            "id": "test_1",
             "title": "test text 1",
-            "content": "test text 1 rabbit",
+            "content": "ribbit rabbit",
         }
     ])
