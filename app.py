@@ -4,7 +4,7 @@ import pysolr
 app = Flask(__name__)
 
 # Configure the Solr instance (replace with your Solr core URL)
-SOLR_URL = "http://localhost:8983/solr/mycollection"
+SOLR_URL = "http://localhost:8983/solr/enron_emails"
 solr = pysolr.Solr(SOLR_URL, always_commit=True, timeout=10)
 
 # Basic HTML template
@@ -44,23 +44,22 @@ def search():
     return render_template_string(HTML_TEMPLATE, results=results)
 
 if __name__ == "__main__":
-    
     app.run(debug=True,port=5000)
 
-    solr.add([
-        {
-            "id": "test_1",
-            "title": "test text 1",
-        }
-    ])
-    # Define a sample document
-    sample_doc = {
-        "id": "12345",
-        "title": "Sample Document",
-        "author": "John Doe",
-        "content": "This is a test document added using pysolr.",
-        "timestamp": "2025-02-15T12:00:00Z"
-    }
+    # solr.add([
+    #     {
+    #         "id": "test_1",
+    #         "title": "test text 1",
+    #     }
+    # ])
+    # # Define a sample document
+    # sample_doc = {
+    #     "id": "12345",
+    #     "title": "Sample Document",
+    #     "author": "John Doe",
+    #     "content": "This is a test document added using pysolr.",
+    #     "timestamp": "2025-02-15T12:00:00Z"
+    # }
     
     # Add the document to Solr
-    solr.add([sample_doc])
+    # solr.add([sample_doc])
