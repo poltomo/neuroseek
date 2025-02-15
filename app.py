@@ -12,7 +12,7 @@ HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Solr Search</title>
+    <title>NeuroSeek Search</title>
 </head>
 <body>
     <h1>Solr Search</h1>
@@ -44,4 +44,4 @@ def search():
     return render_template_string(HTML_TEMPLATE, results=results)
 
 if __name__ == "__main__":
-    app.run(debug=True,port=8983)
+    app.run(debug=True,port=5000)
