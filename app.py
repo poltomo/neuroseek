@@ -39,7 +39,7 @@ def search():
     results = []
     
     if query:
-        results = solr.search("content:"+query, rows=10)
+        results = solr.search("title:"+query, rows=10)
     print(list(results))
     return render_template_string(HTML_TEMPLATE, results=results)
 
