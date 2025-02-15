@@ -115,8 +115,8 @@ def search():
         ranking = model.rank(query, contents)
         # print(list(results))
     return render_template_string(HTML_TEMPLATE,
-                                  results=zip(sorted(results,key=lambda x:ranking[results.index(x)]["score"]),
-                                           sorted(ranking,key=lambda x:x["score"])) if query else None)
+                                  results=zip(sorted(results,key=lambda x:-ranking[results.index(x)]["score"]),
+                                           sorted(ranking,key=lambda x:-x["score"])) if query else None)
 
 if __name__ == "__main__":
     app.run(debug=True,port=5000)
