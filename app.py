@@ -77,7 +77,7 @@ HTML_TEMPLATE = """
 </body>
 </html>
 """
-HTML_TEMPLATE_OLD = """
+HTML_TEMPLATE2 = """
 <!DOCTYPE html>
 <html>
 <head>
@@ -112,7 +112,7 @@ def search():
         for doc in results:
             if "content" in doc:
                 contents.append(doc["content"][0])
-        ranking = model.rank(query, contents)
+        ranking = model.rank(query, contents) if len(contents) > 0 else []
         # print(list(results))
     return render_template_string(HTML_TEMPLATE,
                                   results=zip(sorted(results,key=lambda x:-ranking[results.index(x)]["score"]),
