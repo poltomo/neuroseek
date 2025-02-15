@@ -40,6 +40,7 @@ def search():
     
     if query:
         results = solr.search("title:"+query, rows=10)
+
     print(list(results))
     return render_template_string(HTML_TEMPLATE, results=results)
 
