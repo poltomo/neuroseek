@@ -40,8 +40,14 @@ def search():
     
     if query:
         results = solr.search(query, rows=10)
-    
+    print(list(results))
     return render_template_string(HTML_TEMPLATE, results=results)
 
 if __name__ == "__main__":
     app.run(debug=True,port=5000)
+    solr.add([
+        {
+            "id": "test_1",
+            "title": "test text 1",
+        }
+    ])
