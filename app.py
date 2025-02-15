@@ -12,10 +12,14 @@ HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
 <head>
+<<<<<<< HEAD
     <title>NeuroSeek Search</title>
+=======
+    <title>neuroseek</title>
+>>>>>>> 7ae41a2 (no change)
 </head>
 <body>
-    <h1>Solr Search</h1>
+    <h1>neuroseek</h1>
     <form method="GET">
         <input type="text" name="q" placeholder="Enter search query" required>
         <button type="submit">Search</button>
@@ -43,7 +47,7 @@ def search():
     print(list(results))
     return render_template_string(HTML_TEMPLATE, results=results)
 
-if __name__ == "__main__":
+if __name__ == "__main__":s
     app.run(debug=True,port=5000)
 
     solr.add([
@@ -52,3 +56,14 @@ if __name__ == "__main__":
             "title": "test text 1",
         }
     ])
+    # Define a sample document
+    sample_doc = {
+        "id": "12345",
+        "title": "Sample Document",
+        "author": "John Doe",
+        "content": "This is a test document added using pysolr.",
+        "timestamp": "2025-02-15T12:00:00Z"
+    }
+    
+    # Add the document to Solr
+    solr.add([sample_doc])
