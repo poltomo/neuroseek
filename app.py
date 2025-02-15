@@ -1,5 +1,10 @@
 from flask import Flask, request, render_template_string
 import pysolr
+from mypyc.ir.ops import Integer
+from sentence_transformers import CrossEncoder
+
+from crossEncoder import initCrossEncoder
+from sentenceTransformer import initSentenceTransformer
 
 app = Flask(__name__)
 
@@ -24,8 +29,8 @@ HTML_TEMPLATE = """
     {% if results %}
         <h2>Results:</h2>
         <ul>
-        {% for doc in results %}
-            <li><strong>{{ doc['id'] }}</strong>: {{ doc['title'][0] if 'title' in doc else 'No title' }}</li>
+        {% for doc,rk in results %}
+            <li><strong>{{ doc['id'] }}</strong> sim {{ rk['score'] }}: {{ doc['content'][0] if 'content' in doc else 'No content' }}</li>
         {% endfor %}
         </ul>
     {% endif %}
@@ -33,34 +38,28 @@ HTML_TEMPLATE = """
 </html>
 """
 
+model = initCrossEncoder()
 @app.route("/", methods=["GET"])
 def search():
     query = request.args.get("q", "")
-    results = []
-    
     if query:
-        results = solr.search("title:"+query, rows=10)
-
-    print(list(results))
-    return render_template_string(HTML_TEMPLATE, results=results)
+        results = list(solr.search("content:"+query, rows=10))
+        contents = []
+        for doc in results:
+            if "content" in doc:
+                contents.append(doc["content"][0])
+        ranking = model.rank(query, contents)
+        # print(list(results))
+    return render_template_string(HTML_TEMPLATE,
+                                  results=zip(sorted(results,key=lambda x:ranking[results.index(x)]["score"]),
+                                           sorted(ranking,key=lambda x:x["score"])) if query else zip([],[]))
 
 if __name__ == "__main__":
     app.run(debug=True,port=5000)
-
-    # solr.add([
-    #     {
-    #         "id": "test_1",
-    #         "title": "test text 1",
-    #     }
-    # ])
-    # # Define a sample document
-    # sample_doc = {
-    #     "id": "12345",
-    #     "title": "Sample Document",
-    #     "author": "John Doe",
-    #     "content": "This is a test document added using pysolr.",
-    #     "timestamp": "2025-02-15T12:00:00Z"
-    # }
-    
-    # Add the document to Solr
-    # solr.add([sample_doc])
+    solr.add([
+        {
+            "id": "test_2",
+            "title": "test text 1",
+            "content": "test text 1 rabbit",
+        }
+    ])
