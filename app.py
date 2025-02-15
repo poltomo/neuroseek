@@ -51,15 +51,15 @@ def search():
         ranking = model.rank(query, contents)
         # print(list(results))
     return render_template_string(HTML_TEMPLATE,
-                                  results=zip(sorted(results,key=lambda x:ranking[results.index(x)]["score"]),
-                                           sorted(ranking,key=lambda x:x["score"])) if query else zip([],[]))
+                                  results=zip(sorted(results,key=lambda x:-ranking[results.index(x)]["score"]),
+                                           sorted(ranking,key=lambda x:-x["score"])) if query else zip([],[]))
 
 if __name__ == "__main__":
     app.run(debug=True,port=5000)
-    solr.add([
-        {
-            "id": "test_2",
-            "title": "test text 1",
-            "content": "test text 1 rabbit",
-        }
-    ])
+    # solr.add([
+    #     {
+    #         "id": "test_2",
+    #         "title": "test text 1",
+    #         "content": "test text 1 rabbit",
+    #     }
+    # ])
